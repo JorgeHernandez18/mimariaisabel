@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Menú Especial del Corazón - Maria Isabel</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Playfair+Display:ital,wght@0,500;0,700;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <!-- Font Awesome icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" type="image/png" href="logo.png">
+
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        cream: '#FDFBF7',
+                        warmSand: '#F5EFEB',
+                        coffeeGold: '#D4A373',
+                        softAmber: '#FAEDCD',
+                        deepRose: '#E07A5F',
+                        roseAccent: '#F4A261',
+                        warmDark: '#3D405B',
+                    },
+                    fontFamily: {
+                        serif: ['"Playfair Display"', 'serif'],
+                        handwriting: ['"Caveat"', 'cursive'],
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #FDFBF7;
+            background-image: radial-gradient(#E5DACE 0.75px, transparent 0.75px);
+            background-size: 16px 16px;
+            color: #3D405B;
+        }
+
+        .menu-border {
+            border: 2px dashed #D4A373;
+        }
+
+        .polaroid {
+            background: white;
+            padding: 10px 10px 24px 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.06);
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        .polaroid:hover {
+            transform: translateY(-6px) rotate(1deg);
+            box-shadow: 0 12px 25px rgba(224, 122, 95, 0.18);
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            20%, 60% { transform: translateX(-8px); }
+            40%, 80% { transform: translateX(8px); }
+        }
+
+        .animate-shake {
+            animation: shake 0.4s ease-in-out;
+        }
+
+        /* Particles */
+        .heart-particle {
+            position: fixed;
+            pointer-events: none;
+            z-index: 9999;
+            animation: floatUp 3.5s linear forwards;
+            opacity: 0.9;
+        }
+
+        @keyframes floatUp {
+            0% {
+                transform: translateY(0) scale(0.8) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100vh) scale(1.3) rotate(360deg);
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+<body class="font-sans antialiased min-h-screen flex flex-col justify-between selection:bg-softAmber">
+
+    <!-- ========================================== -->
+    <!-- 1. PANTALLA DE ACCESO (GATEKEEPER)        -->
+    <!-- ========================================== -->
+    <div id="gatekeeperModal" class="fixed inset-0 z-50 flex items-center justify-center bg-cream/95 backdrop-blur-md transition-opacity duration-500">
+        <div id="gatekeeperCard" class="bg-white p-8 md:p-10 rounded-2xl shadow-2xl max-w-md w-11/12 text-center border border-coffeeGold/20 relative overflow-hidden">
+            <div class="w-16 h-16 bg-softAmber/60 text-coffeeGold rounded-full flex items-center justify-center mx-auto mb-4 shadow-inner">
+                <i class="fa-solid fa-mug-hot text-2xl"></i>
+            </div>
+            
+            <h2 class="font-serif text-2xl md:text-3xl font-bold text-warmDark mb-2">Un Menú Hecho Para Ti</h2>
+            <p class="text-sm text-gray-600 mb-6 font-light">Ingresa la clave especial para abrir el menú preparado con mucho cariño ☕✨</p>
+
+            <form id="loginForm" onsubmit="handleLogin(event)" class="space-y-4">
+                <div class="relative">
+                    <input 
+                        type="password" 
+                        id="passcode" 
+                        placeholder="Escribe la clave aquí..." 
+                        class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:border-coffeeGold focus:ring-2 focus:ring-coffeeGold/30 outline-none text-center text-lg tracking-widest transition duration-200"
+                        required
+                        autocomplete="off"
+                    />
+                    <p id="errorMessage" class="text-xs text-deepRose mt-2 hidden font-medium">Clave incorrecta. Inténtalo de nuevo, Maria Isabel. ✨</p>
+                </div>
+
+                <button 
+                    type="submit" 
+                    class="w-full bg-deepRose hover:bg-roseAccent text-white font-medium py-3 px-6 rounded-xl shadow-lg shadow-deepRose/20 transition-all duration-300 hover:shadow-xl active:scale-95 flex items-center justify-center gap-2"
+                >
+                    <span>Entrar al Menú</span>
+                    <i class="fa-solid fa-utensils text-sm"></i>
+                </button>
+            </form>
+            <p class="text-xs text-gray-400 mt-6 italic">Pista: Tu frase especial sin espacios: "mi..."</p>
+        </div>
+    </div>
+
+
+    <!-- ========================================== -->
+    <!-- 2. CONTENIDO PRINCIPAL                    -->
+    <!-- ========================================== -->
+    <div id="mainContent" class="hidden max-w-4xl mx-auto px-4 py-8 md:py-12 w-full">
+        
+        <!-- Header -->
+        <header class="text-center mb-12 relative">
+            <div class="inline-block relative">
+                <div class="w-28 h-28 md:w-36 md:h-36 mx-auto mb-4 rounded-full bg-white p-2 shadow-md border-2 border-coffeeGold/40 flex items-center justify-center overflow-hidden">
+                    <img 
+                        src="logo.png" 
+                        alt="Logo del Restaurante" 
+                        onerror="this.onerror=null; this.src='https://placehold.co/150x150/FAEDCD/3D405B?text=Tu+Logo';"
+                        class="w-full h-full object-cover rounded-full"
+                    />
+                </div>
+                <span class="absolute -bottom-2 right-0 bg-deepRose text-white text-xs px-3 py-1 rounded-full shadow-sm font-handwriting text-base">Edición Especial</span>
+            </div>
+
+            <h1 class="font-serif text-3xl md:text-5xl font-bold text-warmDark mt-2 tracking-wide">Menú Especial del Corazón</h1>
+            <p class="font-handwriting text-2xl md:text-3xl text-coffeeGold mt-1">Descubriendo juntos cada nuevo detalle</p>
+
+            <div class="flex items-center justify-center gap-4 mt-4">
+                <span class="h-[1px] w-12 md:w-20 bg-coffeeGold/40"></span>
+                <i class="fa-solid fa-heart text-deepRose text-xs"></i>
+                <span class="h-[1px] w-12 md:w-20 bg-coffeeGold/40"></span>
+            </div>
+        </header>
+
+        <!-- Main Card -->
+        <main class="bg-white rounded-3xl p-6 md:p-10 shadow-xl border border-coffeeGold/20 relative">
+            
+            <div class="menu-border p-4 md:p-8 rounded-2xl">
+
+                <!-- NOTA PRINCIPAL (Equilibrada) -->
+                <section class="mb-14">
+                    <div class="flex items-center gap-3 mb-6">
+                        <div class="p-2 bg-softAmber rounded-lg text-deepRose">
+                            <i class="fa-solid fa-envelope-open-text text-xl"></i>
+                        </div>
+                        <div>
+                            <span class="text-xs uppercase tracking-widest text-coffeeGold font-semibold">Entrante / Para Comenzar</span>
+                            <h2 class="font-serif text-2xl md:text-3xl font-bold text-warmDark">Un Mensaje Especial Para Ti</h2>
+                        </div>
+                    </div>
+
+                    <div class="bg-warmSand/50 p-6 md:p-8 rounded-2xl border-l-4 border-deepRose font-sans text-gray-700 leading-relaxed space-y-4">
+                        <p class="font-medium text-warmDark text-lg">Mi hermosa Maria Isabel,</p>
+                        
+                        <p>
+                            Inspirado en la dedicación que le pones a tus mañanas y a tu restaurante, quise crear este pequeño espacio para decirte lo mucho que disfruto compartir mi tiempo contigo.
+                        </p>
+
+                        <p>
+                            Estar a tu lado es una experiencia bellísima. Me fascina ir descubriendo poco a poco todo lo que te gusta, conocer tus detalles, tus gestos y lo que hace feliz a tu corazón. Cada día aprendo algo nuevo de ti, y eso me llena de una alegría enorme.
+                        </p>
+
+                        <p class="italic bg-white/80 p-4 rounded-xl border border-coffeeGold/20 text-warmDark font-serif">
+                            "Quiero que sepas que me encantáis un montón y que me siento inmensamente bien a tu lado. Mi único deseo siempre será cuidarte, proteger tu bienestar y estar ahí para ti en cada momento, haciéndote sentir la mujer hermosa y valorada que eres."
+                        </p>
+
+                        <p>
+                            Gracias por ser tan auténtica y por iluminar mis días. Este detalle es con todo el cariño de mi corazón.
+                        </p>
+
+                        <div class="pt-4 text-right">
+                            <span class="font-handwriting text-2xl text-deepRose block">Con todo mi cuidado y cariño,</span>
+                            <span class="font-serif font-bold text-warmDark">Tu Ingeniero Favorito ☕✨</span>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- BEBIDAS PARA EL CORAZÓN (CON FOTOS Y DETALLES) -->
+                <section class="mb-14">
+                    <div class="flex items-center gap-3 mb-6">
+                        <div class="p-2 bg-softAmber rounded-lg text-deepRose">
+                            <i class="fa-solid fa-mug-saucer text-xl"></i>
+                        </div>
+                        <div>
+                            <span class="text-xs uppercase tracking-widest text-coffeeGold font-semibold">Para Acompañar</span>
+                            <h2 class="font-serif text-2xl md:text-3xl font-bold text-warmDark">Bebidas del Corazón</h2>
+                        </div>
+                    </div>
+
+                    <p class="text-sm text-gray-500 mb-6">Haz clic en "Destapar Nota" en cada bebida para descubrir un detalle especial:</p>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                        
+                        <!-- BEBIDA 1 -->
+                        <div class="bg-warmSand/30 rounded-2xl border border-coffeeGold/20 overflow-hidden shadow-sm hover:shadow-md transition">
+                            <div class="h-44 overflow-hidden relative">
+                                <img src="bebida1.jpeg" alt="Café Especial" onerror="this.onerror=null; this.src='https://placehold.co/500x300/FAEDCD/3D405B?text=Caf%C3%A9+Especial';" class="w-full h-full object-cover transform hover:scale-105 transition duration-500">
+                                <span class="absolute top-3 left-3 bg-white/90 backdrop-blur-sm text-deepRose font-serif text-xs px-3 py-1 rounded-full font-bold shadow">Café Mañanero</span>
+                            </div>
+                            <div class="p-4">
+                                <h3 class="font-serif font-bold text-lg text-warmDark">Café de Admiración</h3>
+                                <p class="text-xs text-gray-500 mb-3">Preparado con gratitud por ver tu dedicación diaria.</p>
+                                <div id="drinkMsg1" class="text-xs text-warmDark italic bg-white p-3 rounded-xl border border-coffeeGold/20 hidden mb-3">
+                                    <i class="fa-solid fa-sparkles text-coffeeGold mr-1"></i> "Cada día aprendo más de tus gustos y de lo increíble que eres trabajando por tus sueños."
+                                </div>
+                                <button onclick="toggleDrinkNote('drinkMsg1', this)" class="w-full bg-softAmber hover:bg-coffeeGold/20 text-deepRose font-medium py-2 px-4 rounded-xl text-xs transition flex items-center justify-center gap-2">
+                                    <span>Destapar Nota</span>
+                                    <i class="fa-solid fa-chevron-down text-[10px]"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- BEBIDA 2 -->
+                        <div class="bg-warmSand/30 rounded-2xl border border-coffeeGold/20 overflow-hidden shadow-sm hover:shadow-md transition">
+                            <div class="h-44 overflow-hidden relative">
+                                <img src="bebida2.jpeg" alt="Jugo Fresco" onerror="this.onerror=null; this.src='https://placehold.co/500x300/F5EFEB/3D405B?text=Jugo+Fresco';" class="w-full h-full object-cover transform hover:scale-105 transition duration-500">
+                                <span class="absolute top-3 left-3 bg-white/90 backdrop-blur-sm text-deepRose font-serif text-xs px-3 py-1 rounded-full font-bold shadow">Jugo Cítrico</span>
+                            </div>
+                            <div class="p-4">
+                                <h3 class="font-serif font-bold text-lg text-warmDark">Jugo de Protección</h3>
+                                <p class="text-xs text-gray-500 mb-3">Una dosis de energía para cuidar siempre tu sonrisa.</p>
+                                <div id="drinkMsg2" class="text-xs text-warmDark italic bg-white p-3 rounded-xl border border-coffeeGold/20 hidden mb-3">
+                                    <i class="fa-solid fa-sparkles text-coffeeGold mr-1"></i> "Mi mayor deseo es protegerte, hacerte sentir segura y jamás causarte ninguna incomodidad."
+                                </div>
+                                <button onclick="toggleDrinkNote('drinkMsg2', this)" class="w-full bg-softAmber hover:bg-coffeeGold/20 text-deepRose font-medium py-2 px-4 rounded-xl text-xs transition flex items-center justify-center gap-2">
+                                    <span>Destapar Nota</span>
+                                    <i class="fa-solid fa-chevron-down text-[10px]"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- BEBIDA 3 -->
+                        <div class="bg-warmSand/30 rounded-2xl border border-coffeeGold/20 overflow-hidden shadow-sm hover:shadow-md transition">
+                            <div class="h-44 overflow-hidden relative">
+                                <img src="bebida3.jpeg" alt="Chocolate Caliente" onerror="this.onerror=null; this.src='https://placehold.co/500x300/E5DACE/3D405B?text=Chocolate+Caliente';" class="w-full h-full object-cover transform hover:scale-105 transition duration-500">
+                                <span class="absolute top-3 left-3 bg-white/90 backdrop-blur-sm text-deepRose font-serif text-xs px-3 py-1 rounded-full font-bold shadow">Chocolate Dulce</span>
+                            </div>
+                            <div class="p-4">
+                                <h3 class="font-serif font-bold text-lg text-warmDark">Chocolate de Abrazo</h3>
+                                <p class="text-xs text-gray-500 mb-3">Cálido y dulce para esos momentos de tranquilidad.</p>
+                                <div id="drinkMsg3" class="text-xs text-warmDark italic bg-white p-3 rounded-xl border border-coffeeGold/20 hidden mb-3">
+                                    <i class="fa-solid fa-sparkles text-coffeeGold mr-1"></i> "Me siento inmensamente feliz y en paz cada vez que estoy cerquita de ti."
+                                </div>
+                                <button onclick="toggleDrinkNote('drinkMsg3', this)" class="w-full bg-softAmber hover:bg-coffeeGold/20 text-deepRose font-medium py-2 px-4 rounded-xl text-xs transition flex items-center justify-center gap-2">
+                                    <span>Destapar Nota</span>
+                                    <i class="fa-solid fa-chevron-down text-[10px]"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- BEBIDA 4 -->
+                        <div class="bg-warmSand/30 rounded-2xl border border-coffeeGold/20 overflow-hidden shadow-sm hover:shadow-md transition">
+                            <div class="h-44 overflow-hidden relative">
+                                <img src="bebida4.jpeg" alt="Té Aromático" onerror="this.onerror=null; this.src='https://placehold.co/500x300/F4A261/ffffff?text=T%C3%A9+Arom%C3%A1tico';" class="w-full h-full object-cover transform hover:scale-105 transition duration-500">
+                                <span class="absolute top-3 left-3 bg-white/90 backdrop-blur-sm text-deepRose font-serif text-xs px-3 py-1 rounded-full font-bold shadow">Infusión Relax</span>
+                            </div>
+                            <div class="p-4">
+                                <h3 class="font-serif font-bold text-lg text-warmDark">Té de Paciencia y Cuidado</h3>
+                                <p class="text-xs text-gray-500 mb-3">Para escucharte siempre con toda la atención del mundo.</p>
+                                <div id="drinkMsg4" class="text-xs text-warmDark italic bg-white p-3 rounded-xl border border-coffeeGold/20 hidden mb-3">
+                                    <i class="fa-solid fa-sparkles text-coffeeGold mr-1"></i> "Quiero aprender cada detalle de lo que te hace feliz y cuidarlo siempre."
+                                </div>
+                                <button onclick="toggleDrinkNote('drinkMsg4', this)" class="w-full bg-softAmber hover:bg-coffeeGold/20 text-deepRose font-medium py-2 px-4 rounded-xl text-xs transition flex items-center justify-center gap-2">
+                                    <span>Destapar Nota</span>
+                                    <i class="fa-solid fa-chevron-down text-[10px]"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                    </div>
+                </section>
+
+
+                <!-- GALERÍA DE FOTOS -->
+                <section class="mb-14">
+                    <div class="flex items-center gap-3 mb-6">
+                        <div class="p-2 bg-softAmber rounded-lg text-deepRose">
+                            <i class="fa-solid fa-camera-retro text-xl"></i>
+                        </div>
+                        <div>
+                            <span class="text-xs uppercase tracking-widest text-coffeeGold font-semibold">Platos Principales</span>
+                            <h2 class="font-serif text-2xl md:text-3xl font-bold text-warmDark">Momentos Especiales</h2>
+                        </div>
+                    </div>
+
+                    <p class="text-sm text-gray-500 mb-6">Haz clic en cada polaroid para verla en pantalla completa:</p>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                        <div class="polaroid cursor-pointer transform -rotate-1" onclick="openLightbox('foto1.jpeg', 'Tu sonrisa ilumina cualquier mañana.')">
+                            <div class="aspect-square bg-gray-100 overflow-hidden mb-3 rounded">
+                                <img src="foto1.jpeg" alt="Foto 1" onerror="this.onerror=null; this.src='https://placehold.co/600x600/FAEDCD/3D405B?text=Tu+Foto+1';" class="w-full h-full object-cover">
+                            </div>
+                            <p class="font-handwriting text-xl text-center text-warmDark">Tu alegría tan bonita ☀️</p>
+                        </div>
+
+                        <div class="polaroid cursor-pointer transform rotate-2" onclick="openLightbox('foto2.jpeg', 'Disfrutando del tiempo juntos, sin prisa y con mucha paz.')">
+                            <div class="aspect-square bg-gray-100 overflow-hidden mb-3 rounded">
+                                <img src="foto2.jpeg" alt="Foto 2" onerror="this.onerror=null; this.src='https://placehold.co/600x600/F5EFEB/3D405B?text=Tu+Foto+2';" class="w-full h-full object-cover">
+                            </div>
+                            <p class="font-handwriting text-xl text-center text-warmDark">Momentos únicos ☕</p>
+                        </div>
+
+                        <div class="polaroid cursor-pointer transform -rotate-2" onclick="openLightbox('foto3.jpeg', 'Me encanta conocerte cada día un poco más.')">
+                            <div class="aspect-square bg-gray-100 overflow-hidden mb-3 rounded">
+                                <img src="foto3.jpeg" alt="Foto 3" onerror="this.onerror=null; this.src='https://placehold.co/600x600/E5DACE/3D405B?text=Tu+Foto+3';" class="w-full h-full object-cover">
+                            </div>
+                            <p class="font-handwriting text-xl text-center text-warmDark">Aprender de ti 🥰</p>
+                        </div>
+
+                        <div class="polaroid cursor-pointer transform rotate-1" onclick="openLightbox('foto4.jpeg', 'Construyendo recuerdos hermosos a tu lado.')">
+                            <div class="aspect-square bg-gray-100 overflow-hidden mb-3 rounded">
+                                <img src="foto4.jpeg" alt="Foto 4" onerror="this.onerror=null; this.src='https://placehold.co/600x600/F4A261/ffffff?text=Tu+Foto+4';" class="w-full h-full object-cover">
+                            </div>
+                            <p class="font-handwriting text-xl text-center text-warmDark">Por más momentos 😍</p>
+                        </div>
+                    </div>
+                </section>
+
+
+                <!-- POSTRES Y PROMESAS -->
+                <section class="mb-14">
+                    <div class="flex items-center gap-3 mb-6">
+                        <div class="p-2 bg-softAmber rounded-lg text-deepRose">
+                            <i class="fa-solid fa-cookie-bite text-xl"></i>
+                        </div>
+                        <div>
+                            <span class="text-xs uppercase tracking-widest text-coffeeGold font-semibold">Postre Dulce</span>
+                            <h2 class="font-serif text-2xl md:text-3xl font-bold text-warmDark">Compromisos de la Casa</h2>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div class="p-5 rounded-2xl bg-cream border border-coffeeGold/20 text-center hover:shadow-md transition">
+                            <div class="text-deepRose text-2xl mb-2"><i class="fa-solid fa-shield-heart"></i></div>
+                            <h3 class="font-serif font-bold text-warmDark mb-1">Cuidarte Siempre</h3>
+                            <p class="text-xs text-gray-600">Proteger tus sentimientos y asegurarme de que te sientas apoyada en todo momento.</p>
+                        </div>
+
+                        <div class="p-5 rounded-2xl bg-cream border border-coffeeGold/20 text-center hover:shadow-md transition">
+                            <div class="text-deepRose text-2xl mb-2"><i class="fa-solid fa-lightbulb"></i></div>
+                            <h3 class="font-serif font-bold text-warmDark mb-1">Aprender de Ti</h3>
+                            <p class="text-xs text-gray-600">Estar siempre atento a tus gustos, tus detalles y las cosas que te alegran el día.</p>
+                        </div>
+
+                        <div class="p-5 rounded-2xl bg-cream border border-coffeeGold/20 text-center hover:shadow-md transition">
+                            <div class="text-deepRose text-2xl mb-2"><i class="fa-solid fa-face-smile-beam"></i></div>
+                            <h3 class="font-serif font-bold text-warmDark mb-1">Sacarte Sonrisas</h3>
+                            <p class="text-xs text-gray-600">Hacer de cada día juntos un espacio de tranquilidad, calma y mucha felicidad.</p>
+                        </div>
+                    </div>
+                </section>
+
+
+                <!-- BOTÓN DE ACCIÓN FINAL -->
+                <section class="text-center bg-softAmber/30 p-8 rounded-2xl border border-coffeeGold/30">
+                    <i class="fa-solid fa-heart-circle-bolt text-4xl text-deepRose mb-3 inline-block"></i>
+                    <h2 class="font-serif text-2xl md:text-3xl font-bold text-warmDark mb-2">¿Te gustó este detalle especial?</h2>
+                    <p class="text-sm text-gray-600 mb-6 max-w-lg mx-auto">Preparado especialmente para hacerte sonreír hoy.</p>
+
+                    <button 
+                        onclick="triggerLoveSurprise()" 
+                        class="bg-deepRose hover:bg-roseAccent text-white font-medium py-3.5 px-8 rounded-full shadow-lg shadow-deepRose/30 hover:shadow-xl transition-all duration-300 transform hover:scale-105 active:scale-95 inline-flex items-center gap-2"
+                    >
+                        <span>Enviar abrazo virtual</span>
+                        <i class="fa-solid fa-heart"></i>
+                    </button>
+                </section>
+
+            </div>
+        </main>
+
+        <footer class="text-center mt-12 text-xs text-gray-400">
+            <p>Hecho con mucho cariño para Maria Isabel ❤️</p>
+        </footer>
+    </div>
+
+
+    <!-- LIGHTBOX MODAL -->
+    <div id="lightbox" class="fixed inset-0 z-50 bg-black/80 hidden backdrop-blur-sm flex items-center justify-center p-4" onclick="closeLightbox()">
+        <div class="max-w-2xl w-full bg-white p-4 rounded-2xl shadow-2xl relative" onclick="event.stopPropagation()">
+            <button onclick="closeLightbox()" class="absolute -top-3 -right-3 bg-deepRose text-white w-8 h-8 rounded-full flex items-center justify-center shadow-lg hover:bg-roseAccent transition">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            <img id="lightboxImg" src="" alt="Vista ampliada" class="w-full max-h-[70vh] object-contain rounded-lg">
+            <p id="lightboxCaption" class="font-handwriting text-2xl text-center text-warmDark mt-4 px-2"></p>
+        </div>
+    </div>
+
+
+    <!-- JAVASCRIPT -->
+    <script>
+        const CORRECT_PASSCODE = "mimariaisabel";
+
+        function toggleDrinkNote(id, btn) {
+            const el = document.getElementById(id);
+            if (el.classList.contains('hidden')) {
+                el.classList.remove('hidden');
+                btn.querySelector('span').innerText = 'Ocultar Nota';
+                triggerHearts();
+            } else {
+                el.classList.add('hidden');
+                btn.querySelector('span').innerText = 'Destapar Nota';
+            }
+        }
+
+        function handleLogin(e) {
+            e.preventDefault();
+            const input = document.getElementById('passcode');
+            const userValue = input.value.trim().toLowerCase();
+            const errorMessage = document.getElementById('errorMessage');
+            const card = document.getElementById('gatekeeperCard');
+
+            if (userValue === CORRECT_PASSCODE) {
+                const modal = document.getElementById('gatekeeperModal');
+                modal.classList.add('opacity-0');
+                setTimeout(() => {
+                    modal.classList.add('hidden');
+                    document.getElementById('mainContent').classList.remove('hidden');
+                    triggerHearts();
+                }, 500);
+            } else {
+                errorMessage.classList.remove('hidden');
+                card.classList.add('animate-shake');
+                setTimeout(() => card.classList.remove('animate-shake'), 400);
+            }
+        }
+
+        function openLightbox(src, caption) {
+            const lightbox = document.getElementById('lightbox');
+            const img = document.getElementById('lightboxImg');
+            const cap = document.getElementById('lightboxCaption');
+            
+            img.src = src;
+            cap.innerText = caption;
+            lightbox.classList.remove('hidden');
+        }
+
+        function closeLightbox() {
+            document.getElementById('lightbox').classList.add('hidden');
+        }
+
+        function triggerLoveSurprise() {
+            triggerHearts();
+            
+            const msg = document.createElement('div');
+            msg.className = 'fixed bottom-10 left-1/2 transform -translate-x-1/2 bg-deepRose text-white px-6 py-3 rounded-full shadow-2xl font-serif text-lg z-50 animate-bounce text-center';
+            msg.innerHTML = '¡Un abrazo gigante y lleno de cariño para ti! ✨☕';
+            document.body.appendChild(msg);
+
+            setTimeout(() => {
+                msg.remove();
+            }, 4000);
+        }
+
+        function triggerHearts() {
+            const icons = ['✨', '💖', '☕', '🥐', '🌸', '🍂'];
+            for (let i = 0; i < 25; i++) {
+                setTimeout(() => {
+                    const heart = document.createElement('div');
+                    heart.className = 'heart-particle';
+                    heart.innerText = icons[Math.floor(Math.random() * icons.length)];
+                    heart.style.left = Math.random() * 100 + 'vw';
+                    heart.style.top = '100vh';
+                    heart.style.fontSize = (Math.random() * 18 + 18) + 'px';
+                    document.body.appendChild(heart);
+
+                    setTimeout(() => heart.remove(), 3500);
+                }, i * 100);
+            }
+        }
+    </script>
+</body>
+</html>
